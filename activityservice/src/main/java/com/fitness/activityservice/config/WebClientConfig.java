@@ -8,8 +8,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class WebClientConfig {
 
-    @Bean
-    @LoadBalanced
+    @Bean    // using bean ,so that it is accessible throughout the application.
+    @LoadBalanced  //will be using service name internally for inter process communication , so load balance is necessary.
+//    {just like how we send request from postman same WebClient does, it is HTTP client}
+//    {WebClient.builder it is like a factory which makes WebClient}
     public WebClient.Builder webClientBuilder(){
         return WebClient.builder();
     }

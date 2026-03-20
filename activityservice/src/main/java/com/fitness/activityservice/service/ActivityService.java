@@ -14,9 +14,16 @@ public class ActivityService {
 
     private final ActivityRepository activityRepository;   //ye required argument hai , to iska constructor generate hojayega(i.e RequiredArgsConstructor)
     //repository object hai jo database se baat karega
-
+    private final UserValidationService userValidationService;
 
     public ActivityResponse trackActivity(ActivityRequest request) {
+
+        boolean isValidUser = userValidationService.validateUser(request.getUserId());
+
+                if(!isValidUser){
+                    throw new RuntimeException("Invalid user"+ request.getUserId());
+                }
+
         Activity activity = Activity.builder()      //lombok build pattern for object creation.
                 .userId(request.getUserId())
                 .type(request.getType())

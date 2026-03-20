@@ -18,6 +18,6 @@ public class ActivityController {
 
     @PostMapping
     public ResponseEntity<ActivityResponse> trackActivity(@RequestBody ActivityRequest request){
-        return ResponseEntity.ok(activityService.trackActivity(request));
+        return ResponseEntity.ok(activityService.trackActivity(request));  //for business logic
     }
 }

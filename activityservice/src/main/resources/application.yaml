@@ -5,6 +5,13 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/activityfitness
       database: aiactivityfitness
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      # key ko as a string , and value ko as a JSON object store krenge
+
 
 eureka:
   client:
@@ -13,3 +20,9 @@ eureka:
 
 server:
   port: 8082
+
+activity: <ACTIVITY>
+
+kafka:
+  topic:
+    name: activity-events

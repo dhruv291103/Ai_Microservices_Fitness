@@ -6,6 +6,9 @@ import com.fitness.activityservice.dto.ActivityResponse;
 import com.fitness.activityservice.model.Activity;
 import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
+//import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service   // SP's service layer for business logic
@@ -15,6 +18,11 @@ public class ActivityService {
     private final ActivityRepository activityRepository;   //ye required argument hai , to iska constructor generate hojayega(i.e RequiredArgsConstructor)
     //repository object hai jo database se baat karega
     private final UserValidationService userValidationService;
+    private final KafkaTemplate<String, Activity> kafkaTemplate;
+
+    @Value("${kafka.topic.name}")
+    private String topicName;
+
 
     public ActivityResponse trackActivity(ActivityRequest request) {
 
@@ -34,6 +42,13 @@ public class ActivityService {
                 .build();
 
         Activity savedActivity = activityRepository.save(activity);
+
+        try{
+            kafkaTemplate.send(topicName, savedActivity.getUserId(), savedActivity);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
         
         return mapToResponse(savedActivity);  // mapToResponse jo hai wo 'savedActivity' ko 'ActivityResponse' me map karega
     }
